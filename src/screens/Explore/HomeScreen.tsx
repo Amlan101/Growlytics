@@ -1,15 +1,20 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Button } from 'react-native';
+import StockCard from 'components/StockCard';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-export default function HomeScreen() {
+type Props = NativeStackScreenProps<any>;
+
+export default function HomeScreen({ navigation }: Props) {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Home Screen</Text>
+      <Text style={styles.title}>Home Screen</Text>
+      <StockCard symbol="AAPL" onPress={() => navigation.navigate('ProductDetail', { symbol: 'AAPL' })} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  text: { fontSize: 20, fontWeight: 'bold' },
+  container: { flex: 1, alignItems: 'center', paddingTop: 50 },
+  title: { fontSize: 20, fontWeight: 'bold', marginBottom: 20 },
 });

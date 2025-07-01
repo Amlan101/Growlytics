@@ -1,15 +1,28 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-export default function WatchlistScreen() {
+type Props = NativeStackScreenProps<any>;
+
+export default function WatchlistScreen({ navigation }: Props) {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Watchlist Screen</Text>
+      <Pressable onPress={() => navigation.navigate('WatchlistStocks', { name: 'Watchlist 1' })}>
+        <Text style={styles.item}>Watchlist 1</Text>
+      </Pressable>
+      <Pressable onPress={() => navigation.navigate('WatchlistStocks', { name: 'Watchlist 2' })}>
+        <Text style={styles.item}>Watchlist 2</Text>
+      </Pressable>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  text: { fontSize: 20, fontWeight: 'bold' },
+  container: { flex: 1, padding: 20 },
+  item: {
+    fontSize: 18,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
 });

@@ -1,8 +1,8 @@
 import React from "react";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-import HomeScreen from 'screens/Explore/HomeScreen';
-import WatchlistScreen from 'screens/Watchlist/WatchlistScreen';
+import HomeStack from './HomeStack';
+import WatchlistStack from './WatchlistStack';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
@@ -19,7 +19,7 @@ export default function Tabs() {
       >
         <Tab.Screen
           name="Explore"
-          component={HomeScreen}
+          component={HomeStack}
           options={{
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons name="compass-outline" size={size} color={color} />
@@ -28,7 +28,7 @@ export default function Tabs() {
         />
         <Tab.Screen
           name="Watchlist"
-          component={WatchlistScreen}
+          component={WatchlistStack}
           options={{
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons name="bookmark-outline" size={size} color={color} />
