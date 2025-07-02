@@ -1,20 +1,60 @@
 import React from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
-import StockCard from 'components/StockCard';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
+import useTopGainers from 'hooks/useTopGainers';
 
-type Props = NativeStackScreenProps<any>;
+export default function HomeScreen() {
+  const { data, loading, error } = useTopGainers();
 
-export default function HomeScreen({ navigation }: Props) {
+  if (loading) {
+    return (
+      <View style={styles.center}>
+        <ActivityIndicator size="large" color="#6200ee" />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.center}>
+        <Text style={styles.error}>Error: {error}</Text>
+      </View>
+    );
+  }
+
+  if (!data || data.length === 0) {
+    return (
+      <View style={styles.center}>
+        <Text>No gainers found.</Text>
+      </View>
+    );
+  }
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Home Screen</Text>
-      <StockCard symbol="AAPL" onPress={() => navigation.navigate('ProductDetail', { symbol: 'AAPL' })} />
-    </View>
+    <FlatList
+      data={data}
+      keyExtractor={(item) => item.symbol}
+      renderItem={({ item }) => (
+        <View style={styles.card}>
+          <Text style={styles.symbol}>{item.symbol}</Text>
+          <Text>₹{item.price.toFixed(2)}</Text>
+          <Text style={{ color: item.changePercentage > 0 ? 'green' : 'red' }}>
+            {item.changePercentage.toFixed(2)}%
+          </Text>
+        </View>
+      )}
+      contentContainerStyle={styles.list}
+    />
   );
 }
-
 const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: 'center', paddingTop: 50 },
-  title: { fontSize: 20, fontWeight: 'bold', marginBottom: 20 },
+  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  error: { color: 'red', fontSize: 16 },
+  list: { padding: 16 },
+  card: {
+    backgroundColor: '#f0f0f0',
+    padding: 16,
+    marginBottom: 12,
+    borderRadius: 8,
+  },
+  symbol: { fontSize: 18, fontWeight: 'bold' },
 });
