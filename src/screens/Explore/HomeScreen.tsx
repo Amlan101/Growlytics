@@ -6,6 +6,7 @@ import {
   Button,
   ActivityIndicator,
   ScrollView,
+  TouchableOpacity
 } from 'react-native';
 import useTopGainers from 'hooks/useTopGainers';
 import useTopLosers from 'hooks/useTopLosers';
@@ -61,24 +62,33 @@ export default function HomeScreen({ navigation }: Props) {
     <ScrollView contentContainerStyle={styles.list}>
       <Text style={styles.section}>Top Gainers</Text>
       {gainers?.map((item) => (
-        <View style={styles.card} key={item.symbol}>
+        <TouchableOpacity
+          key={item.symbol}
+          style={styles.card}
+          onPress={() =>
+            navigation.navigate('ProductDetail', { symbol: item.symbol })
+          }
+        >
           <Text style={styles.symbol}>{item.symbol}</Text>
           <Text>₹{item.price.toFixed(2)}</Text>
-          <Text style={{ color: 'green' }}>
-            {item.changePercentage.toFixed(2)}%
-          </Text>
-        </View>
+          <Text style={{ color: 'green' }}>{item.changePercentage.toFixed(2)}%</Text>
+        </TouchableOpacity>
+
       ))}
 
       <Text style={styles.section}>Top Losers</Text>
       {losers?.map((item) => (
-        <View style={styles.card} key={item.symbol}>
+        <TouchableOpacity
+          key={item.symbol}
+          style={styles.card}
+          onPress={() =>
+            navigation.navigate('ProductDetail', { symbol: item.symbol })
+          }
+        >
           <Text style={styles.symbol}>{item.symbol}</Text>
           <Text>₹{item.price.toFixed(2)}</Text>
-          <Text style={{ color: 'red' }}>
-            {item.changePercentage.toFixed(2)}%
-          </Text>
-        </View>
+          <Text style={{ color: 'red' }}>{item.changePercentage.toFixed(2)}%</Text>
+        </TouchableOpacity>
       ))}
     </ScrollView>
   );
