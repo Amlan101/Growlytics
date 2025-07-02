@@ -6,20 +6,23 @@ export default function useTopGainers() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await stockService.getTopGainers();
-        setData(result);
-      } catch (e: any) {
-        setError(e.message ?? 'Failed to fetch data');
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const result = await stockService.getTopGainers();
+      setData(result);
+      setError(null);
+    } catch (e: any) {
+      setError(e.message ?? 'Failed to fetch data');
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
 
-  return { data, loading, error };
+  return { data, loading, error, reload: fetchData };
 }
+
