@@ -17,7 +17,8 @@ export const formatPercentage = (value: number, decimals: number = 2): string =>
   return `${(value * 100).toFixed(decimals)}%`;
 };
 
-export const formatRatio = (value: number, decimals: number = 2): string => {
+export const formatRatio = (value: number | null | undefined, decimals: number = 2): string => {
+  if (typeof value !== 'number' || isNaN(value)) return '--';
   return value.toFixed(decimals);
 };
 

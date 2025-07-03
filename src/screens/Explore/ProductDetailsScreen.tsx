@@ -43,6 +43,13 @@ export default function ProductDetailScreen({ route, navigation }: Props) {
   const priceData = calculatePriceChange(chartData);
   const chartTransformedData = transformChartData(chartData);
 
+  let latestPriceText = '$291.00'; 
+  const latest = chartData?.at?.(-1);
+  if (Array.isArray(chartData) && chartData.length > 0 && typeof latest?.close === 'number') {
+    latestPriceText = `$${latest.close.toFixed(2)}`;
+  } else {
+    console.warn('⚠️ chartData has malformed or missing close value:', latest);
+  }
 
   return (
     <ScrollView 
@@ -57,12 +64,11 @@ export default function ProductDetailScreen({ route, navigation }: Props) {
       </Text>
 
       <Text style={styles.section}>Price Chart (Intraday)</Text>
-
+      <Text style={styles.price}>{latestPriceText}</Text>
       <View style={styles.headerInfo}>
         <Text style={styles.ticker}>{overview.symbol}</Text>
-        <Text style={styles.price}>${chartData?.at(-1)?.close.toFixed(2) ?? '--'}</Text>
-        <Text style={[styles.change, { color: priceData.isGain ? 'green' : 'red' }]}>
-        {priceData.formattedChange}
+        <Text style={styles.price}>
+          
         </Text>
       </View>
 
