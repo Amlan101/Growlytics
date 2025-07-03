@@ -14,6 +14,9 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { LineChart } from 'react-native-chart-kit';
 import { IntradayDataPoint } from 'models/Stock';
 import { HomeStackParamList } from 'navigation/navigation-types';
+import { calculatePriceChange } from '../../utils/priceCalculations';
+import { formatCurrency, formatMarketCap, formatPercentage, formatRatio, formatPrice } from '../../utils/formatters';
+import { transformChartData } from '../../utils/chartHelpers';
 
 type Props = NativeStackScreenProps<HomeStackParamList, 'ProductDetail'>;
 
@@ -38,14 +41,8 @@ export default function ProductDetailScreen({ route, navigation }: Props) {
     );
   }
 
-  const priceStart = chartData?.[0]?.close ?? 0;
-  const priceEnd = chartData?.at(-1)?.close ?? 0;
-
-  const change = priceEnd - priceStart;
-  const changePct = priceStart !== 0 ? (change / priceStart) * 100 : 0;
-
-  const formattedChange = `${change >= 0 ? '+' : ''}${changePct.toFixed(2)}%`;
-  const isGain = change >= 0;
+  const priceData = calculatePriceChange(chartData);
+  const chartTransformedData = transformChartData(chartData);
 
 
   return (
@@ -65,26 +62,15 @@ export default function ProductDetailScreen({ route, navigation }: Props) {
       <View style={styles.headerInfo}>
         <Text style={styles.ticker}>{overview.symbol}</Text>
         <Text style={styles.price}>${chartData?.at(-1)?.close.toFixed(2) ?? '--'}</Text>
-        <Text style={[styles.change, { color: isGain ? 'green' : 'red' }]}>
-        {formattedChange}
+        <Text style={[styles.change, { color: priceData.isGain ? 'green' : 'red' }]}>
+        {priceData.formattedChange}
         </Text>
       </View>
 
-{chartData && chartData.length > 0 ? (
+{chartData && chartData.length > 0 && chartTransformedData ? (
   <LineChart
-    data={{
-      labels: chartData.map((point: IntradayDataPoint, index: number) =>
-        index % Math.floor(chartData.length / 6) === 0
-          ? point.timestamp.split(' ')[1].slice(0, 5)
-          : ''
-      ),
-      datasets: [
-        {
-          data: chartData.map((point) => point.close),
-        },
-      ],
-    }}
-    width={Dimensions.get('window').width - 32} // padding-safe width
+    data={chartTransformedData}
+    width={Dimensions.get('window').width - 32}
     height={220}
     yAxisLabel="$"
     withVerticalLines={false}
@@ -123,26 +109,26 @@ export default function ProductDetailScreen({ route, navigation }: Props) {
       </View>
 
       <View style={styles.statsRow}>
-        <Text>52W Low: ${overview.week52Low}</Text>
-        <Text>52W High: ${overview.week52High}</Text>
+        <Text>52W Low: {formatCurrency(overview.week52Low)}</Text>
+        <Text>52W High: {formatCurrency(overview.week52High)}</Text>
       </View>
 
       <View style={styles.statsGrid}>
         <View style={styles.stat}>
           <Text style={styles.statLabel}>Market Cap</Text>
-          <Text>${(overview.marketCap / 1e12).toFixed(2)}T</Text>
+          <Text>{formatMarketCap(overview.marketCap)}</Text>
         </View>
         <View style={styles.stat}>
           <Text style={styles.statLabel}>P/E Ratio</Text>
-          <Text>{overview.peRatio.toFixed(2)}</Text>
+          <Text>{formatRatio(overview.peRatio)}</Text>
         </View>
         <View style={styles.stat}>
           <Text style={styles.statLabel}>Dividend Yield</Text>
-          <Text>{(overview.dividendYield * 100).toFixed(2)}%</Text>
+          <Text>{formatPercentage(overview.dividendYield)}</Text>
         </View>
         <View style={styles.stat}>
           <Text style={styles.statLabel}>Profit Margin</Text>
-          <Text>{(overview.profitMargin * 100).toFixed(2)}%</Text>
+          <Text>{formatPercentage(overview.profitMargin)}</Text>
         </View>
       </View>
     </ScrollView>
