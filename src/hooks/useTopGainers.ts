@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import stockService, { StockSummary } from 'services/stockService';
+import stockService from 'services/stockService';
+import { StockSummary } from 'models/Stock';
 
 export default function useTopGainers() {
   const [data, setData] = useState<StockSummary[] | null>(null);

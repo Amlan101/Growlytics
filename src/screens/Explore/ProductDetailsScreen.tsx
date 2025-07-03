@@ -12,15 +12,12 @@ import {
 import useStockDetail from 'hooks/useStockDetail';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { LineChart } from 'react-native-chart-kit';
-import { IntradayDataPoint } from 'services/stockService';
+import { IntradayDataPoint } from 'models/Stock';
+import { HomeStackParamList } from 'navigation/navigation-types';
 
-type RootStackParamList = {
-  ProductDetail: { symbol: string };
-}
+type Props = NativeStackScreenProps<HomeStackParamList, 'ProductDetail'>;
 
-type Props = NativeStackScreenProps<RootStackParamList, 'ProductDetail'>;
-
-export default function ProductDetailScreen({ route }: Props) {
+export default function ProductDetailScreen({ route, navigation }: Props) {
   const { symbol } = route.params;
   const { overview, chartData, loading, error, refresh } = useStockDetail(symbol);
 

@@ -1,8 +1,9 @@
 import { useEffect, useState, useCallback } from 'react';
-import stockService, {
+import stockService from 'services/stockService';
+import {
   CompanyOverview,
   IntradayDataPoint,
-} from 'services/stockService';
+} from 'models/Stock';
 
 type StockDetailState = {
   overview: CompanyOverview | null;

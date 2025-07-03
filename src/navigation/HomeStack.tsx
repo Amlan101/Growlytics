@@ -4,9 +4,12 @@ import HomeScreen from 'screens/Explore/HomeScreen';
 import ViewAllScreen from 'screens/Explore/ViewAllScreen';
 import ProductDetailScreen from 'screens/Explore/ProductDetailsScreen';
 import AddToWatchlistModal from 'screens/Explore/AddToWatchlistModal';
+import { HomeStackParamList } from './navigation-types';
 
 
-const Stack = createNativeStackNavigator();
+
+const Stack = createNativeStackNavigator<HomeStackParamList>();
+
 
 export default function HomeStack() {
   return (
