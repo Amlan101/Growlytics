@@ -1,4 +1,4 @@
-import { IntradayDataPoint } from '../models/Stock';
+import { IntradayDataPoint } from 'models/Stock';
 
 export const generateChartLabels = (chartData: IntradayDataPoint[]): string[] => {
   if (!chartData || chartData.length === 0) return [];

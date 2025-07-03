@@ -12,11 +12,10 @@ import {
 import useStockDetail from 'hooks/useStockDetail';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { LineChart } from 'react-native-chart-kit';
-import { IntradayDataPoint } from 'models/Stock';
 import { HomeStackParamList } from 'navigation/navigation-types';
-import { calculatePriceChange } from '../../utils/priceCalculations';
-import { formatCurrency, formatMarketCap, formatPercentage, formatRatio, formatPrice } from '../../utils/formatters';
-import { transformChartData } from '../../utils/chartHelpers';
+import { calculatePriceChange } from 'utils/priceCalculations';
+import { formatCurrency, formatMarketCap, formatPercentage, formatRatio, formatPrice } from 'utils/formatters';
+import { transformChartData } from 'utils/chartHelpers';
 
 type Props = NativeStackScreenProps<HomeStackParamList, 'ProductDetail'>;
 
