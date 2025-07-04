@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import {
   View,
   Text,
@@ -6,7 +6,8 @@ import {
   Button,
   ActivityIndicator,
   ScrollView,
-  TouchableOpacity
+  TouchableOpacity,
+  TextInput
 } from 'react-native';
 import useTopGainers from 'hooks/useTopGainers';
 import useTopLosers from 'hooks/useTopLosers';
@@ -15,6 +16,12 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 type Props = NativeStackScreenProps<any>;
 
 export default function HomeScreen({ navigation }: Props) {
+
+  useLayoutEffect(() => {
+  navigation.setOptions({
+    headerTitle: 'Growlytics',
+  });
+}, [navigation]);
   
   const { data: gainers, loading: loadingGainers, error: errorGainers, reload: reloadGainers, } = useTopGainers();
   const { data: losers, loading: loadingLosers, error: errorLosers, reload: reloadLosers, } = useTopLosers();
@@ -111,4 +118,9 @@ const styles = StyleSheet.create({
     marginVertical: 16,
     color: '#333',
   },
+  searchText: {
+    fontSize: 24,
+    color: "#555",
+    marginRight: 12
+  }
 });

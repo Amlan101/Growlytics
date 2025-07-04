@@ -16,11 +16,11 @@ export default function Tabs() {
         }}
       >
         <Tab.Screen
-          name="Explore"
+          name="Home"
           component={HomeStack}
           options={{
             tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="compass-outline" size={size} color={color} />
+              <MaterialCommunityIcons name="home-outline" size={size} color={color} />
             ),
           }}
         />
