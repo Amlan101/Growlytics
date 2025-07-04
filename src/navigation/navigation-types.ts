@@ -2,7 +2,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 export type HomeStackParamList = {
   HomeScreen: undefined;
-  ViewAll: undefined;
+  ViewAll: { type: 'gainers' | 'losers'; title?: string };
 };
 
 export type RootStackParamList = {

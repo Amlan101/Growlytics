@@ -78,12 +78,27 @@ export default function WatchlistScreen() {
 
   return (
     <FlatList
-      data={watchlist}
-      keyExtractor={(item) => item.symbol}
-      renderItem={renderItem}
-      contentContainerStyle={styles.list}
-      refreshControl={<RefreshControl refreshing={loading} onRefresh={refresh} />}
+  data={watchlist}
+  renderItem={({ item }) => (
+    <StockCard
+      symbol={item.symbol}
+      price={item.price}
+      onPress={() =>
+        navigation.navigate('ProductDetail', { symbol: item.symbol })
+      }
     />
+  )}
+  keyExtractor={(item) => item.symbol}
+  numColumns={2}
+  contentContainerStyle={styles.list}
+  refreshControl={
+    <RefreshControl refreshing={loading} onRefresh={refresh} />
+  }
+/>
+
+
+
+
   );
 
 }

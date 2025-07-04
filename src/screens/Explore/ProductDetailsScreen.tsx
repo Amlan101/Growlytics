@@ -76,91 +76,120 @@ export default function ProductDetailScreen({ route, navigation }: Props) {
   }
 
   return (
-    <ScrollView 
-      contentContainerStyle={styles.container}
-      refreshControl={
-        <RefreshControl refreshing={loading} onRefresh={refresh} />
-      }
+    <ScrollView>
+<View style={[styles.overviewRow, { paddingHorizontal: 16, paddingTop: 16 }]}>
+  <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+    {/* Circular icon with first letter */}
+    <View
+      style={{
+        width: 48,
+        height: 48,
+        borderRadius: 24,
+        backgroundColor: '#f5f6fa', 
+        borderWidth: 1,
+        borderColor: '#d1d5db', 
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 12,
+      }}
     >
-      <Text style={styles.name}>{overview.name}</Text>
-      <Text style={styles.subheading}>
+      <Text style={{ fontSize: 28, fontWeight: 'bold', color: '#111' }}>
+        {overview.name?.charAt(0) || ''}
+      </Text>
+    </View>
+    <View style={styles.leftBlock}>
+      <Text style={[styles.symbolName, { fontSize: 14 }]}>
+        {overview.name}
+      </Text>
+      <Text style={[styles.symbolMeta, { fontSize: 12 }]}>
         {overview.symbol}, {overview.exchange}
       </Text>
-
-      <Text style={styles.section}>Price Chart (Intraday)</Text>
-      <Text style={styles.price}>{latestPriceText}</Text>
-      <View style={styles.headerInfo}>
-        <Text style={styles.ticker}>{overview.symbol}</Text>
-        <Text style={styles.price}>
-          
-        </Text>
-      </View>
+    </View>
+  </View>
+  <View style={styles.rightBlock}>
+    <Text style={styles.priceLarge}>{latestPriceText}</Text>
+    <Text style={[styles.percentageChange, { color: priceData.isGain ? '#00b386' : '#ff3b30' }]}>
+      {priceData.formattedChange}
+    </Text>
+  </View>
+</View>
 
 {chartData && chartData.length > 0 && chartTransformedData ? (
-  <LineChart
-    data={chartTransformedData}
-    width={Dimensions.get('window').width - 32}
-    height={220}
-    yAxisLabel="$"
-    withVerticalLines={false}
-    withDots={false}
-    chartConfig={{
-      backgroundColor: '#ffffff',
-      backgroundGradientFrom: '#ffffff',
-      backgroundGradientTo: '#ffffff',
-      decimalPlaces: 2,
-      color: (opacity = 1) => `rgba(0, 122, 255, ${opacity})`,
-      labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-      style: {
-        borderRadius: 12,
-      },
-      propsForBackgroundLines: {
-        stroke: '#eee',
-      },
-    }}
-    bezier
-    style={{
-      marginVertical: 16,
-      borderRadius: 12,
-    }}
-  />
+  <View style={{ marginHorizontal: 16 }}>
+    <LineChart
+      data={chartTransformedData}
+      width={Dimensions.get('window').width - 32}
+      height={220}
+      yAxisLabel="$"
+      withVerticalLines={false}
+      withDots={false}
+      chartConfig={{
+        backgroundColor: '#fff',
+        backgroundGradientFrom: '#fff',
+        backgroundGradientTo: '#fff',
+        decimalPlaces: 2,
+        color: (opacity = 1) => `rgba(0, 122, 255, ${opacity})`,
+        labelColor: () => '#999',
+        propsForBackgroundLines: {
+          stroke: '#eee',
+        },
+      }}
+      bezier
+      style={styles.chart}
+    />
+  </View>
 ) : (
-  <Text style={{ color: '#888', fontSize: 14 }}>No chart data available.</Text>
+  <Text style={styles.chartPlaceholder}>No chart data available</Text>
 )}
 
 
-      <Text style={styles.section}>About {overview.name}</Text>
-      <Text style={styles.description}>{overview.description}</Text>
+{/* About */}
+<View style={styles.card}>
+  <Text style={styles.cardTitle}>About {overview.name}</Text>
+  <Text style={styles.description}>{overview.description}</Text>
 
-      <View style={styles.badges}>
-        <Text style={styles.badge}>Sector: {overview.sector}</Text>
-        <Text style={styles.badge}>Industry: {overview.industry}</Text>
-      </View>
+  <View style={styles.badgeContainer}>
+    <Text style={[styles.badge, { backgroundColor: '#fde8e8', color: '#a30000' }]}>
+      Industry: {overview.industry}
+    </Text>
+    <Text style={[styles.badge, { backgroundColor: '#fde8e8', color: '#a30000' }]}>
+      Sector: {overview.sector}
+    </Text>
+  </View>
 
-      <View style={styles.statsRow}>
-        <Text>52W Low: {formatCurrency(overview.week52Low)}</Text>
-        <Text>52W High: {formatCurrency(overview.week52High)}</Text>
-      </View>
+  {/* Price Range Row */}
+  <View style={styles.priceRangeRow}>
+    <Text style={styles.statLabel}>52-Week Low</Text>
+    <Text style={styles.priceNowLabel}>Current: {latestPriceText}</Text>
+    <Text style={styles.statLabel}>52-Week High</Text>
+  </View>
+  <View style={styles.priceRangeRow}>
+    <Text style={styles.statValue}>{formatCurrency(overview.week52Low)}</Text>
+    <Text style={styles.statValue}>⇵</Text>
+    <Text style={styles.statValue}>{formatCurrency(overview.week52High)}</Text>
+  </View>
 
-      <View style={styles.statsGrid}>
-        <View style={styles.stat}>
-          <Text style={styles.statLabel}>Market Cap</Text>
-          <Text>{formatMarketCap(overview.marketCap)}</Text>
-        </View>
-        <View style={styles.stat}>
-          <Text style={styles.statLabel}>P/E Ratio</Text>
-          <Text>{formatRatio(overview.peRatio)}</Text>
-        </View>
-        <View style={styles.stat}>
-          <Text style={styles.statLabel}>Dividend Yield</Text>
-          <Text>{formatPercentage(overview.dividendYield)}</Text>
-        </View>
-        <View style={styles.stat}>
-          <Text style={styles.statLabel}>Profit Margin</Text>
-          <Text>{formatPercentage(overview.profitMargin)}</Text>
-        </View>
-      </View>
-    </ScrollView>
+  {/* Row stats at the bottom of the card */}
+  <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
+    <View style={{ alignItems: 'center', flex: 1 }}>
+      <Text style={styles.statLabel}>Market Cap</Text>
+      <Text style={styles.statValue}>{formatMarketCap(overview.marketCap)}</Text>
+    </View>
+    <View style={{ alignItems: 'center', flex: 1 }}>
+      <Text style={styles.statLabel}>P/E Ratio</Text>
+      <Text style={styles.statValue}>{formatRatio(overview.peRatio)}</Text>
+    </View>
+    <View style={{ alignItems: 'center', flex: 1 }}>
+      <Text style={styles.statLabel}>Dividend Yield</Text>
+      <Text style={styles.statValue}>{formatPercentage(overview.dividendYield)}</Text>
+    </View>
+    <View style={{ alignItems: 'center', flex: 1 }}>
+      <Text style={styles.statLabel}>Profit Margin</Text>
+      <Text style={styles.statValue}>{formatPercentage(overview.profitMargin)}</Text>
+    </View>
+  </View>
+</View>
+</ScrollView>
   );
 }
 
@@ -206,14 +235,6 @@ const styles = StyleSheet.create({
     marginTop: 12,
     marginBottom: 24,
   },
-  badge: {
-    backgroundColor: '#EEE',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-    fontSize: 12,
-    marginRight: 8,
-  },
   statsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -252,5 +273,91 @@ price: {
 change: {
   fontSize: 16,
   fontWeight: '500',
+},
+overviewRow: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'flex-start',
+  marginBottom: 16,
+},
+leftBlock: {
+  flex: 1,
+},
+rightBlock: {
+  alignItems: 'flex-end',
+},
+symbolName: {
+  fontSize: 22,
+  fontWeight: '700',
+  color: '#000',
+},
+symbolMeta: {
+  fontSize: 14,
+  color: '#666',
+  marginTop: 4,
+},
+priceLarge: {
+  fontSize: 20,
+  fontWeight: '600',
+  color: '#111',
+},
+percentageChange: {
+  fontSize: 14,
+  marginTop: 4,
+},
+chart: {
+  borderRadius: 12,
+  marginBottom: 24,
+},
+chartPlaceholder: {
+  fontSize: 14,
+  color: '#999',
+  textAlign: 'center',
+  marginVertical: 16,
+},
+card: {
+  backgroundColor: 'white',
+  padding: 16,
+  borderRadius: 12,
+  shadowColor: '#000',
+  shadowOpacity: 0.05,
+  shadowRadius: 4,
+  elevation: 2,
+  marginBottom: 24,
+},
+cardTitle: {
+  fontSize: 16,
+  fontWeight: '600',
+  marginBottom: 12,
+},
+badgeContainer: {
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  gap: 8,
+  marginTop: 12,
+  marginBottom: 16,
+},
+badge: {
+  backgroundColor: '#f0f2f5',
+  paddingHorizontal: 10,
+  paddingVertical: 6,
+  borderRadius: 16,
+  fontSize: 12,
+  marginRight: 8,
+},
+priceRangeRow: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginTop: 8,
+},
+priceNowLabel: {
+  fontSize: 12,
+  color: '#999',
+},
+statValue: {
+  fontSize: 14,
+  fontWeight: '600',
+  color: '#111',
 },
 });
