@@ -27,7 +27,13 @@ export default {
     web: {
       favicon: './assets/favicon.png',
     },
+    android: {
+        package: "com.amlan101.growlytics" 
+      },
     extra: {
+      "eas": {
+        "projectId": "ac943fc9-44c9-49f9-917c-47983e351482"
+      },
       ALPHA_VANTAGE_API_KEY: process.env.ALPHA_VANTAGE_API_KEY,
     },
   },
