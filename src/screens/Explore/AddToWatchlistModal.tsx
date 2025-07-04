@@ -11,9 +11,15 @@ import { StockSummary } from 'models/Stock';
 import stockService from 'services/stockService';
 import useWatchlist from 'hooks/useWatchlist';
 import { useNavigation } from '@react-navigation/native';
+import { useRoute, RouteProp } from '@react-navigation/native';
+import { RootStackParamList } from 'navigation/navigation-types';
+
 
 export default function AddToWatchlistModal() {
-  const [symbol, setSymbol] = useState('');
+  const route = useRoute<RouteProp<RootStackParamList, 'AddToWatchlist'>>();
+  const initialSymbol = route.params?.symbol || '';
+  const [symbol, setSymbol] = useState(initialSymbol);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -76,8 +82,11 @@ const styles = StyleSheet.create({
   container: {
     padding: 24,
     flex: 1,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
     backgroundColor: 'white',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    marginTop: 64,
   },
   title: {
     fontSize: 20,

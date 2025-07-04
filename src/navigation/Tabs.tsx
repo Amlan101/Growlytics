@@ -1,6 +1,5 @@
 import React from "react";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
 import HomeStack from './HomeStack';
 import WatchlistStack from './WatchlistStack';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -9,7 +8,6 @@ const Tab = createBottomTabNavigator();
 
 export default function Tabs() {
   return (
-    <NavigationContainer>
       <Tab.Navigator
         screenOptions={{
           headerShown: false,
@@ -36,7 +34,6 @@ export default function Tabs() {
           }}
         />
       </Tab.Navigator>
-    </NavigationContainer>
   );
 }
 

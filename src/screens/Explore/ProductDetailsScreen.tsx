@@ -7,21 +7,45 @@ import {
   ActivityIndicator,
   Button,
   Dimensions,
-  RefreshControl
+  RefreshControl,
+  TouchableOpacity
 } from 'react-native';
 import useStockDetail from 'hooks/useStockDetail';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { LineChart } from 'react-native-chart-kit';
-import { HomeStackParamList } from 'navigation/navigation-types';
+import { RootStackParamList } from 'navigation/navigation-types';
 import { calculatePriceChange } from 'utils/priceCalculations';
 import { formatCurrency, formatMarketCap, formatPercentage, formatRatio, formatPrice } from 'utils/formatters';
 import { transformChartData } from 'utils/chartHelpers';
+import { useLayoutEffect } from 'react'; 
+import { MaterialIcons } from '@expo/vector-icons';
+import useWatchlist from 'hooks/useWatchlist';
 
-type Props = NativeStackScreenProps<HomeStackParamList, 'ProductDetail'>;
+type Props = NativeStackScreenProps<RootStackParamList, 'ProductDetail'>;
 
 export default function ProductDetailScreen({ route, navigation }: Props) {
   const { symbol } = route.params;
   const { overview, chartData, loading, error, refresh } = useStockDetail(symbol);
+  const { watchlist } = useWatchlist();
+
+  const isInWatchlist = watchlist.some(item => item.symbol === symbol);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          onPress={() => navigation.navigate('AddToWatchlist', { symbol })}
+        >
+          <MaterialIcons
+            name={isInWatchlist ? 'bookmark' : 'bookmark-border'}
+            size={24}
+            color="#6200ee"
+          />
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation, symbol, isInWatchlist]);
+
 
   if (loading) {
     return (

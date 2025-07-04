@@ -15,9 +15,9 @@ import { useNavigation } from '@react-navigation/native';
 import { StockSummary } from 'models/Stock';
 import StockCard from 'components/StockCard'; 
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { HomeStackParamList } from 'navigation/navigation-types';
+import { HomeStackParamList, RootStackParamList } from 'navigation/navigation-types';
 
-type NavigationProp = NativeStackNavigationProp<HomeStackParamList, 'ProductDetail'>;
+type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'ProductDetail'>;
 
 export default function WatchlistScreen() {
   const { watchlist, loading, error, remove, refresh } = useWatchlist();

@@ -1,6 +1,14 @@
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
 export type HomeStackParamList = {
   Home: undefined;
   ViewAll: undefined;
-  ProductDetail: { symbol: string };
-  AddToWatchlist: undefined;
 };
+
+export type RootStackParamList = {
+  Tabs: undefined;
+  ProductDetail: { symbol: string };
+  AddToWatchlist: { symbol?: string };
+};
+
+export type RootStackNavigationProp = NativeStackNavigationProp<RootStackParamList>;
